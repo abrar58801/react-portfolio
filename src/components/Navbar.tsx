@@ -2,56 +2,49 @@ import { useEffect } from "react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import HoverLinks from "./HoverLinks";
 import { gsap } from "gsap";
-import { ScrollSmoother } from "gsap-trial/ScrollSmoother";
 import "./styles/Navbar.css";
 
-gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
-export let smoother: ScrollSmoother;
+gsap.registerPlugin(ScrollTrigger);
+
+// ✅ keep as optional (no type error)
+export let smoother: any = null;
 
 const Navbar = () => {
   useEffect(() => {
-    smoother = ScrollSmoother.create({
-      wrapper: "#smooth-wrapper",
-      content: "#smooth-content",
-      smooth: 1.7,
-      speed: 1.7,
-      effects: true,
-      autoResize: true,
-      ignoreMobileResize: true,
-    });
-
-    smoother.scrollTop(0);
-    smoother.paused(true);
+    window.scrollTo(0, 0);
 
     let links = document.querySelectorAll(".header ul a");
+
     links.forEach((elem) => {
       let element = elem as HTMLAnchorElement;
+
       element.addEventListener("click", (e) => {
         if (window.innerWidth > 1024) {
           e.preventDefault();
-          let elem = e.currentTarget as HTMLAnchorElement;
-          let section = elem.getAttribute("data-href");
-          smoother.scrollTo(section, true, "top top");
+
+          let section = element.getAttribute("data-href");
+
+          if (section) {
+            const target = document.querySelector(section);
+            target?.scrollIntoView({ behavior: "smooth" });
+          }
         }
       });
     });
-    window.addEventListener("resize", () => {
-      ScrollSmoother.refresh(true);
-    });
   }, []);
+
   return (
     <>
       <div className="header">
-        <a href="/#" className="navbar-title" data-cursor="disable">
-          AA
-        </a>
+        <a href="/#" className="navbar-title">AA</a>
+
         <a
           href="mailto:abrar.web.developer@gmail.com"
           className="navbar-connect"
-          data-cursor="disable"
         >
           abrar.web.developer@gmail.com
         </a>
+
         <ul>
           <li>
             <a data-href="#about" href="#about">
