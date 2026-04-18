@@ -8,14 +8,20 @@ const Contact = () => {
         <h3>Contact</h3>
         <div className="contact-flex">
           <div className="contact-box">
+            <h4>Phone</h4>
+            <p>
+              <a href="tel:+917488047445" data-cursor="disable">
+                +91 74 88 04 7445
+              </a>
+            </p>
             <h4>Email</h4>
             <p>
               <a href="mailto:abrar.web.developer@gmail.com" data-cursor="disable">
                 abrar.web.developer@gmail.com
               </a>
             </p>
-            <h4>Education</h4>
-            <p>BCA in Computer Application</p>
+            {/* <h4>Education</h4>
+            <p>BCA in Computer Application</p> */}
           </div>
           <div className="contact-box">
             <h4>Social</h4>
