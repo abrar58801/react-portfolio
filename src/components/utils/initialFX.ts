@@ -115,59 +115,56 @@ export function initialFX() {
 }
 
 function LoopText(
-  Text1: { chars: NodeListOf<Element> | any },
-  Text2: { chars: NodeListOf<Element> | any }
+  Text1: { chars: NodeListOf<Element> },
+  Text2: { chars: NodeListOf<Element> }
 ) {
-  var tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
-  const delay = 4;
-  const delay2 = delay * 2 + 1;
+  const tl = gsap.timeline({ repeat: -1 });
 
-  tl.fromTo(
-    Text2.chars,
-    { opacity: 0, y: 80 },
-    {
-      opacity: 1,
-      duration: 1.2,
-      ease: "power3.inOut",
-      y: 0,
-      stagger: 0.1,
-      delay: delay,
-    },
-    0,
-  )
+  tl
+    // STEP 1: show Text1
     .fromTo(
       Text1.chars,
-      { y: 80 },
+      { opacity: 0, y: 80 },
       {
-        duration: 1.2,
-        ease: "power3.inOut",
+        opacity: 1,
         y: 0,
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1,
+        duration: 1,
+        stagger: 0.05,
+        ease: "power3.out",
+      }
     )
+
+    // STEP 2: hide Text1
+    .to(Text1.chars, {
+      opacity: 0,
+      y: -80,
+      duration: 1,
+      stagger: 0.05,
+      ease: "power3.in",
+      delay: 1,
+    })
+
+    // STEP 3: show Text2
     .fromTo(
-      Text1.chars,
-      { y: 0 },
-      {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay,
-      },
-      0,
-    )
-    .to(
       Text2.chars,
+      { opacity: 0, y: 80 },
       {
-        y: -80,
-        duration: 1.2,
-        ease: "power3.inOut",
-        stagger: 0.1,
-        delay: delay2,
-      },
-      1,
-    );
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        stagger: 0.05,
+        ease: "power3.out",
+      }
+    )
+
+    // STEP 4: hide Text2
+    .to(Text2.chars, {
+      opacity: 0,
+      y: -80,
+      duration: 1,
+      stagger: 0.05,
+      ease: "power3.in",
+      delay: 1,
+    });
 }
+
