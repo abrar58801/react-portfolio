@@ -3,16 +3,31 @@ import gsap from "gsap";
 import { smoother } from "../Navbar";
 
 export function initialFX() {
-
   function splitText(selector: string) {
   const el = document.querySelector(selector);
-  if (!el) return { chars: [] };
+
+  // ✅ FIX: return valid NodeList
+  if (!el) {
+    return {
+      chars: document.querySelectorAll(".does-not-exist"),
+    };
+  }
+
+  // prevent duplicate split
+  if (el.querySelector(".char")) {
+    return {
+      chars: el.querySelectorAll(".char"),
+    };
+  }
 
   const text = el.textContent || "";
-  const chars = text.split("");
 
-  el.innerHTML = chars
-    .map((char) => `<span class="char">${char}</span>`)
+  el.innerHTML = text
+    .split("")
+    .map(
+      (char) =>
+        `<span class="char">${char === " " ? "&nbsp;" : char}</span>`
+    )
     .join("");
 
   return {
@@ -30,12 +45,12 @@ export function initialFX() {
   });
 
   const landingText = {
-  chars: [
-    ...splitText(".landing-info h3").chars,
-    ...splitText(".landing-intro h2").chars,
-    ...splitText(".landing-intro h1").chars,
-  ],
-};
+    chars: [
+      ...splitText(".landing-info h3").chars,
+      ...splitText(".landing-intro h2").chars,
+      ...splitText(".landing-intro h1").chars,
+    ],
+  };
 
   gsap.fromTo(
     landingText.chars,
@@ -48,10 +63,10 @@ export function initialFX() {
       y: 0,
       stagger: 0.025,
       delay: 0.3,
-    }
+    },
   );
 
-  let TextProps = { type: "chars,lines", linesClass: "split-h2" };
+  // let TextProps = { type: "chars,lines", linesClass: "split-h2" };
 
   const landingText2 = splitText(".landing-h2-info");
 
@@ -66,7 +81,7 @@ export function initialFX() {
       y: 0,
       stagger: 0.025,
       delay: 0.3,
-    }
+    },
   );
 
   gsap.fromTo(
@@ -78,7 +93,7 @@ export function initialFX() {
       ease: "power1.inOut",
       y: 0,
       delay: 0.8,
-    }
+    },
   );
   gsap.fromTo(
     [".header", ".icons-section", ".nav-fade"],
@@ -88,20 +103,20 @@ export function initialFX() {
       duration: 1.2,
       ease: "power1.inOut",
       delay: 0.1,
-    }
+    },
   );
 
   const landingText3 = splitText(".landing-h2-info-1");
-const landingText4 = splitText(".landing-h2-1");
-const landingText5 = splitText(".landing-h2-2");
+  const landingText4 = splitText(".landing-h2-1");
+  const landingText5 = splitText(".landing-h2-2");
 
   LoopText(landingText2, landingText3);
   LoopText(landingText4, landingText5);
 }
 
 function LoopText(
-  Text1: { chars: NodeListOf<Element> },
-  Text2: { chars: NodeListOf<Element> }
+  Text1: { chars: NodeListOf<Element> | any },
+  Text2: { chars: NodeListOf<Element> | any }
 ) {
   var tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
   const delay = 4;
@@ -118,7 +133,7 @@ function LoopText(
       stagger: 0.1,
       delay: delay,
     },
-    0
+    0,
   )
     .fromTo(
       Text1.chars,
@@ -130,7 +145,7 @@ function LoopText(
         stagger: 0.1,
         delay: delay2,
       },
-      1
+      1,
     )
     .fromTo(
       Text1.chars,
@@ -142,7 +157,7 @@ function LoopText(
         stagger: 0.1,
         delay: delay,
       },
-      0
+      0,
     )
     .to(
       Text2.chars,
@@ -153,6 +168,6 @@ function LoopText(
         stagger: 0.1,
         delay: delay2,
       },
-      1
+      1,
     );
 }
